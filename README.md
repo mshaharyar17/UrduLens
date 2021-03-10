@@ -1,6 +1,6 @@
-# flutter_click_pick_crop_compress
+# Urdu Lens
 
-A new Flutter project.
+Fyp Project
 
 ## Getting Started
 
