@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     var image = await ImagePicker.pickImage(source: source);
 
     //Cropping the image
+
 File croppedFile = await ImageCropper.cropImage(
       sourcePath: image.path,
       aspectRatioPresets: [
@@ -32,7 +33,7 @@ File croppedFile = await ImageCropper.cropImage(
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Cropper',
-          toolbarColor: Colors.deepOrange,
+          toolbarColor: Colors.blueAccent,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false),
@@ -40,6 +41,7 @@ File croppedFile = await ImageCropper.cropImage(
         minimumAspectRatio: 1.0,
       )
     );
+    
 
     //Compress the image
 
