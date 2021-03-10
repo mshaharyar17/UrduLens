@@ -28,8 +28,6 @@
 .pub-cache/
 .pub/
 /build/
-/android/
-/ios/
 .flutter-plugins-dependencies
 
 # Android related
