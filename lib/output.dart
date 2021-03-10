@@ -11,8 +11,12 @@ class Output extends StatelessWidget {
         ),
         body: Center(
             child: TextFormField(
+          textAlign: TextAlign.center,
+          maxLines: null,
+          initialValue: ModalRoute.of(context).settings.arguments,
+          style: TextStyle(fontSize: 24),
           decoration: InputDecoration(
-              border: InputBorder.none, hintText: 'Output Text Shown Here'),
+              border: InputBorder.none, hintText: "Recognition Output"),
         )));
   }
 }

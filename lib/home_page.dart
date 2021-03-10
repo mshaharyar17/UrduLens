@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'output.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,37 +21,37 @@ class _HomePageState extends State<HomePage> {
     var image = await ImagePicker.pickImage(source: source);
 
     //Cropping the image
-File croppedFile = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        minimumAspectRatio: 1.0,
-      )
-    );
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ));
 
-    //Compress the image
-
+    /*
     var result = await FlutterImageCompress.compressAndGetFile(
       croppedFile.path,
-      croppedFile.path,
+      croppedFile.path.split(".")[0] + "_compressed.jpg",
       quality: 50,
     );
+    print(croppedFile.path);
+    print(result);
+    */
 
     setState(() {
-      _image = result;
-      print(_image.lengthSync());
+      _image = File(croppedFile.path);
     });
   }
 
@@ -64,8 +64,16 @@ File croppedFile = await ImageCropper.cropImage(
       ),
       body: Column(children: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(Output.route);
+            onPressed: () async {
+              Dio dio = new Dio();
+              Response<Map> res = await dio.post("http://10.0.2.2:5000/",
+                  data: FormData.fromMap({
+                    "photo": await MultipartFile.fromFile(_image.path,
+                        filename: "photo")
+                  }));
+              print(res.data["text"]);
+              Navigator.of(context)
+                  .pushNamed(Output.route, arguments: res.data["text"]);
             },
             child: Text("Convert")),
         Center(
