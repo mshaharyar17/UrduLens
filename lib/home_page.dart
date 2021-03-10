@@ -23,12 +23,13 @@ class _HomePageState extends State<HomePage> {
     //Cropping the image
 
     File croppedFile = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      ratioX: 1.0,
-      ratioY: 1.0,
-      maxWidth: 512,
-      maxHeight: 512,
-    );
+        sourcePath: image.path,
+        cropStyle: CropStyle.rectangle,
+        maxWidth: 512,
+        maxHeight: 512,
+        androidUiSettings: AndroidUiSettings(
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false));
 
     //Compress the image
 
